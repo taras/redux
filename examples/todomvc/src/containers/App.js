@@ -1,32 +1,35 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import Header from '../components/Header'
-import MainSection from '../components/MainSection'
-import * as TodoActions from '../actions'
+import React, { Component } from 'react';
+import Header from '../components/Header';
+import MainSection from '../components/MainSection';
+import Microstates from 'microstates';
+import { map } from 'funcadelic';
+import TodoMVC from '../models/todomvc';
 
-const App = ({todos, actions}) => (
-  <div>
-    <Header addTodo={actions.addTodo} />
-    <MainSection todos={todos} actions={actions} />
-  </div>
-)
+export default class App extends Component {
+  componentWillMount() {
+    this.update({
+      todos: [{ id: 0, text: 'Write Microstates Docs', completed: false }],
+    });
+  }
 
-App.propTypes = {
-  todos: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  update(value) {
+    let { states, transitions } = Microstates.from(TodoMVC, value);
+
+    let actions = map(transition => (...args) => this.update(transition(...args)), transitions);
+
+    this.setState({
+      ...states,
+      actions,
+    });
+  }
+
+  render() {
+    let { actions, todos } = this.state || {};
+    return (
+      <div>
+        <Header addTodo={actions.addTodo} />
+        <MainSection todos={todos} completedCount={this.state.completedCount} actions={actions} />
+      </div>
+    );
+  }
 }
-
-const mapStateToProps = state => ({
-  todos: state.todos
-})
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(TodoActions, dispatch)
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
