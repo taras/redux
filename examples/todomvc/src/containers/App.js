@@ -7,15 +7,17 @@ import TodoMVC from '../models/todomvc';
 
 export default class App extends Component {
   componentWillMount() {
-    this.update({
+    let ms = Microstates(TodoMVC, {
       todos: [{ id: 0, text: 'Write Microstates Docs', completed: false }],
     });
+    this.update(ms);
   }
 
-  update(value) {
-    let { states, transitions } = Microstates.from(TodoMVC, value);
-
-    let actions = map(transition => (...args) => this.update(transition(...args)), transitions);
+  update({ transitions, states }) {
+    let actions = map(
+      transition => (...args) => this.update(transition(...args)),
+      transitions.collapsed
+    );
 
     this.setState({
       ...states,

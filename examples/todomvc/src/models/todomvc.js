@@ -12,18 +12,18 @@ export default class TodoMVC {
   }
 
   completeTodo(current, todo) {
-    return this(current).todos.replace(todo, {
+    return this().todos.replace(todo, {
       ...todo,
       completed: true,
     });
   }
 
   deleteTodo(current, todo) {
-    return this(current).todos.filter(item => item !== todo);
+    return this().todos.filter(item => item !== todo);
   }
 
   addTodo(current, text) {
-    return this(current).todos.push({
+    return this().todos.push({
       text,
       id: current.nextId,
       completed: false,
@@ -31,13 +31,13 @@ export default class TodoMVC {
   }
 
   editTodo(current, todo, text) {
-    return this(current).todos.replace(todo, {
+    return this().todos.replace(todo, {
       text,
       ...todo,
     });
   }
 
   clearCompleted(current) {
-    return this(current).todos.filter(({ completed }) => !completed);
+    return this().todos.filter(({ completed }) => !completed);
   }
 }
