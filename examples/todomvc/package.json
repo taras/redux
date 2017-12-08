@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "funcadelic": "0.2.3",
+    "jest": "^21.2.1",
+    "microstates": "github:cowboyd/microstates.js#3081137",
     "prop-types": "^15.5.10",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
